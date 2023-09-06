@@ -1,0 +1,57 @@
+<!doctype html> 
+<html>
+<head>
+ 	<meta charset="utf-8">
+	<title>끝말잇기</title>
+</head>
+<body>
+	<a href="index.html">WEB</a>
+	<div>
+		<span id="order">1</span>번째 참가자
+	</div>
+	<div>
+		제시어: <span id="word"></span>
+	</div>
+    <input type="text">
+    <button>
+		입력
+	</button>
+	<script>
+		const number = Number(prompt('몇 명이 참가하나요?'));
+		const $button = document.querySelector('button');
+		const $input = document.querySelector('input');
+		const $word = document.querySelector('#word');
+		const $order = document.querySelector('#order');
+		let word; 
+		let newWord;
+		// 변수 선언 시 undefined 저장
+		if (number) {
+			$button.addEventListener('click', onClickButton);
+			$input.addEventListener('input', onInput);
+		}
+		function onClickButton() {
+			if (newWord.length==3) {
+				if (!word || word[word.length-1]===newWord[0]) {
+					word = newWord;
+					$word.textContent = word;	
+					const order = Number($order.textContent);
+					if (order+1>number) {
+						$order.textContent=1;
+						} else {
+							$order.textContent=order+1;
+						}
+					} else {
+						alert('올바르지 않은 단어입니다!');
+					}	
+				} else { 
+					alert('다시 입력해주세요!');
+				}
+				$input.value='';
+				$input.focus();
+			};
+		function onInput() {
+			newWord = event.target.value;
+		};
+	</script>
+</body>		
+</html>
