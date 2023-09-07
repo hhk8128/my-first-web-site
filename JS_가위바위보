@@ -1,0 +1,129 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>가위바위보</title>
+  <style>
+    #computer {
+      width: 142px;
+      height: 200px;
+    }
+  </style>
+</head>
+
+<body>
+<div id="computer"></div>
+<div>
+    <button id="scissors" class="btn">가위</button>
+    <button id="rock" class="btn">바위</button>
+    <button id="paper" class="btn">보</button>
+</div>
+<div id="score">0</div>
+<script>
+    const $computer = document.querySelector('#computer');
+    const $score = document.querySelector('#score');
+    const $rock = document.querySelector('#rock');
+    const $scissors = document.querySelector('#scissors');
+    const $paper = document.querySelector('#paper');
+    const IMG_URL = './rsp.png';
+    $computer.style.background = `url(${IMG_URL}) 0 0`
+    /*
+    $computer.style.background = `url(${IMG_URL}) 0 0`; // 가위
+    $computer.style.background = `url(${IMG_URL}) -220px 0`; // 바위
+    $computer.style.background = `url(${IMG_URL}) -440px 0`; // 보
+    */
+    $computer.style.backgroundSize = 'auto 200px';
+    const rspX = {
+        scissors: '0', // 가위
+        rock: '-220px', // 바위
+        paper: '-440px', // 보
+    }
+
+    let computerChoice ='scissors';
+    const changeComputerHand = () => {
+        if (computerChoice === 'rock') {
+            computerChoice = 'scissors';
+        } else if (computerChoice === 'scissors') {
+            computerChoice = 'paper';
+        } else if (computerChoice === 'paper') {
+            computerChoice = 'rock';
+        }
+        $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`
+        $computer.style.backgroundSize = 'auto 200px'; 
+    }
+    let intervalid = setInterval(changeComputerHand, 50);
+
+    const scoreTable = {
+        rock: 0,
+        scissors: 1,
+        paper: -1,
+    };
+    let clickable = true;
+    let score = 0;
+    const clickButton = () => {
+        if (clickable) {
+            clearInterval(intervalid); 
+            // 점수 계산 및 화면 표시
+            clickable = false;
+            const myChoice = event.target.textContent === '바위'
+                ? 'rock'
+                : event.target.textContent === '가위'
+                    ? 'scissors'
+                    : 'paper';
+            /*
+            위는 조건(삼항)연산자로 if문으로도 작성할 수 있다
+            const myChoice;
+            const textContent = event.target.textContent;
+
+            if (textContent === '바위') {
+                myChoice = 'rock';
+            } else if (textContent === '가위') {
+                myChoice = 'scissors';
+            } else {
+                myChoice = 'paper';
+            }
+            */        
+            
+            const myScore = scoreTable[myChoice];
+            const computerScore = scoreTable[computerChoice];
+            const diff = myScore - computerScore;
+            let message;
+            if ([2, -1].includes(diff) /* diff === 2 || diff === -1 */) {
+                score += 1;
+                message = '승리';
+            } else if ([-2, 1].includes(diff)) {
+                score -= 1;
+                message = '패배';
+            } else {
+                message = '무승부';
+            }
+            $score.textContent = `${message} 총 ${score}점`;
+            setTimeout(() => {
+                clickable = true; // 이제 클릭하면 다시 함수 실행 가능하게 해라
+                intervalid = setInterval(changeComputerHand, 50);
+            }, 1000); // 1000의 의미 = 1초뒤에 앞의 함수를 실행시켜라!
+        } 
+    }; 
+    $rock.addEventListener('click', clickButton);
+    $scissors.addEventListener('click', clickButton);
+    $paper.addEventListener('click', clickButton);
+
+    /*
+    const changeComputerHand = () => {
+        ...
+        $computer.style.backgroundSize = 'auto 200px';
+        setTimeout(changeComputerHand, 50);
+    }
+    setTimeout(changeComputerHand, 50);
+
+    -> 동일한 효과 나타남
+    */ 
+
+    /*
+    removeEventListener 은  addEventListener에 넣은 함수와 == 연산을 할때 결과가 true가 되어야 한다
+
+    */
+
+
+</script>
+</body>
+</html>
