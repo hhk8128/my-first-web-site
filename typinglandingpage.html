@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Text</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: darkslateblue;
+        }
+
+        .wrap {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* 수평과 수직의 중앙에 위치 */
+            color: white;
+            text-align: center;
+        }
+
+        .material-icons {
+            font-size: 10rem;
+        }
+
+        .lg-text {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .sm-text {
+            font-size: 1.5rem;
+        }
+
+        #dynamic {
+            position: relative;
+            display: inline-block;
+        }
+
+        #dynamic::after {
+            content:"";
+            display: block;
+            position: absolute;
+            top: 0;
+            right: -10px;
+            width: 4px;
+            height: 100%;
+            background-color: white;
+        }
+
+        #dynamic.active::after {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1>
+        <span class="material-icons">language</span>
+        </h1>
+        <p id="dynamic" class="lg-text"></p>
+        <p class="sm-text">
+            SUCODING | 100 Subscribe
+        </p>
+    </div>
+
+    <script>
+        let target = document.querySelector("#dynamic");
+        let stringArr = ["Learn to HTML", "Learn to CSS", 
+        "Learn to Javascript", "Learn to Python", "Learn to Ruby"];
+        let selectString = stringArr[Math.floor(Math.random() * stringArr.length)];
+        let selectStringArr = selectString.split(""); //단어 하나하나 쪼개져서 배열로 저장
+        
+        function randomString() {
+            let stringArr = ["Learn to HTML", "Learn to CSS", 
+            "Learn to Javascript", "Learn to Python", "Learn to Ruby"];
+            let selectString = stringArr[Math.floor(Math.random() * stringArr.length)];
+            let selectStringArr = selectString.split("");
+        
+            return selectStringArr;
+        }
+
+        //타이핑 리셋
+        function resetTyping() {
+            target.textContent = "";
+            dynamic(randomString());
+        }
+
+        //한글자씩 텍스트 출력 함수
+        function dynamic(randomArr) {
+            if(randomArr.length > 0) {
+                target.textContent += randomArr.shift();
+                setTimeout(() => {
+                    dynamic(randomArr);
+                }, 80);
+            } else {
+                setTimeout(resetTyping, 3000);
+            }
+        }
+
+        dynamic(randomString());
+
+        // 커서 깜빡임 효과
+        function blink() {
+            target.classList.toggle("active");
+        }
+        setInterval(blink, 500);
+
+    </script>
+</body>
+</html>
